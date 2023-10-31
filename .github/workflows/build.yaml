@@ -1,0 +1,42 @@
+name: Build
+
+on:
+  push:
+
+jobs:
+  build-backend:
+    name: Build backend
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build
+        uses: docker/build-push-action@v5
+        with:
+          context: backend
+          tags: |
+            stadgent/probe-beat-backend:latest
+            stadgent/probe-beat-backend:${{ github.sha }}
+  build-frontend:
+    name: Build frontend
+    runs-on: ubuntu-22.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+      - name: Build
+        uses: docker/build-push-action@v5
+        with:
+          context: frontend
+          build-args: |
+            MODE=production
+            VITE_BACKEND_URL=${{ vars.BACKEND_URL }}
+            VITE_FRONTEND_URL=${{ vars.FRONTEND_URL }}
+            VITE_MSAL_CLIENT_ID=${{ secrets.MSAL_CLIENT_ID }}
+            VITE_MSAL_AUTHORITY=${{ secrets.MSAL_AUTHORITY }}
+          tags: |
+            stadgent/probe-beat-frontend:latest
+            stadgent/probe-beat-frontend:${{ github.sha }}
