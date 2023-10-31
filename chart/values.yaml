@@ -1,0 +1,176 @@
+nameOverride: ""
+fullnameOverride: ""
+
+image:
+  backend: stadgent/probe-beat-backend
+  frontend: stadgent/probe-beat-frontend
+  tag: latest
+  pullPolicy: IfNotPresent
+  pullSecrets: []
+    # - name: <secret-name>
+
+## SparQL database
+sparql:
+  ## SparQL endpoints
+  endpoint:
+    decision: ""
+    taxonomy: ""
+  ## Authenticate with the SparQL database
+  auth:
+    ## SPARQL_AUTH_TYPE
+    ## Possible types: "none", "basic" and "digest"
+    type: "none"
+    ## SPARQL_AUTH_USERNAME
+    username: ""
+    ## SPARQL_AUTH_PASSWORD
+    password: ""
+    ## Secret will override values above
+    # secretName: ""
+
+## Microsoft Authentication
+## To use secrets instead set the following corresponding env variables
+msal:
+  ## MSAL_CLIENT_ID
+  clientId: ""
+  ## MSAL_AUTHORITY
+  authority: ""
+  ## MSAL_ISSUER
+  issuer: ""
+  ## Secret will override values above
+  # secretName: ""
+
+backend:
+  ## number of backend server replicas to deploy
+  replicaCount: 1
+
+  ## Additional environment variables to set for the backend container. See
+  ## https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
+  env: []
+    # - name: ENV_ONE
+    #   value: "one"
+    # - name: ENV_TWO
+    #   value: "two"
+
+  ## Additional environment variables can be retrieved and set from ConfigMaps. See:
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#configure-all-key-value-pairs-in-a-configmap-as-container-environment-variables
+  envConfigMaps: []
+    # - name: my-config-map
+
+  ## Additional environment variables can be retrieved and set from Secrets. See:
+  ## https://kubernetes.io/docs/tasks/inject-data-application/distribute-credentials-secure/#configure-all-key-value-pairs-in-a-secret-as-container-environment-variables
+  envSecrets: []
+    # - name: my-secret
+
+  ## Additional labels that should be included on the pod. See:
+  ## https://kubernetes.io/docs/concepts/overview/working-with-objects/labels
+  podLabels: {}
+    # my-label-key: my-label-value
+
+  podAnnotations: {}
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  resources: {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+frontend:
+  ## number of frontend server replicas to deploy
+  replicaCount: 1
+
+  ## Additional environment variables to set for the frontend container. See
+  ## https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
+  env: []
+    # - name: ENV_ONE
+    #   value: "one"
+    # - name: ENV_TWO
+    #   value: "two"
+
+  ## Additional environment variables can be retrieved and set from ConfigMaps. See:
+  ## https://kubernetes.io/docs/tasks/configure-pod-container/configure-pod-configmap/#configure-all-key-value-pairs-in-a-configmap-as-container-environment-variables
+  envConfigMaps: []
+    # - name: my-config-map
+
+  ## Additional environment variables can be retrieved and set from Secrets. See:
+  ## https://kubernetes.io/docs/tasks/inject-data-application/distribute-credentials-secure/#configure-all-key-value-pairs-in-a-secret-as-container-environment-variables
+  envSecrets: []
+    # - name: my-secret
+
+  ## Additional labels that should be included on the pod. See:
+  ## https://kubernetes.io/docs/concepts/overview/working-with-objects/labels
+  podLabels: {}
+    # my-label-key: my-label-value
+
+  podAnnotations: {}
+
+  podSecurityContext: {}
+    # fsGroup: 2000
+
+  securityContext: {}
+    # capabilities:
+    #   drop:
+    #   - ALL
+    # readOnlyRootFilesystem: true
+    # runAsNonRoot: true
+    # runAsUser: 1000
+
+  resources: {}
+    # limits:
+    #   cpu: 100m
+    #   memory: 128Mi
+    # requests:
+    #   cpu: 100m
+    #   memory: 128Mi
+
+  nodeSelector: {}
+
+  tolerations: []
+
+  affinity: {}
+
+serviceAccount:
+  ## Specifies whether a service account should be created
+  create: true
+  ## Annotations to add to the service account
+  annotations: {}
+  ## The name of the service account to use. If not set and create is true, a name is generated using the fullname template
+  name: ""
+
+## Service for both backend and frontend
+service:
+  type: ClusterIP
+  port: 80
+  ## Specify the nodePort value for the NodePort service type; value ignored otherwise
+  nodePort: ~
+  annotations: {}
+
+## Ingress for both backend and frontend
+ingress:
+  enabled: false
+  className: "nginx"
+  annotations: {}
+    # kubernetes.io/ingress.class: nginx
+    # kubernetes.io/tls-acme: "true"
+  host: ""
+  tls:
+    enabled: false
+    # secretName: ""
