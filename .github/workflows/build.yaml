@@ -44,10 +44,6 @@ jobs:
           context: frontend
           build-args: |
             MODE=production
-            VITE_BACKEND_URL=${{ vars.BACKEND_URL }}
-            VITE_FRONTEND_URL=${{ vars.FRONTEND_URL }}
-            VITE_MSAL_CLIENT_ID=${{ secrets.MSAL_CLIENT_ID }}
-            VITE_MSAL_AUTHORITY=${{ secrets.MSAL_AUTHORITY }}
           push: true
           tags: |
             stadgent/probe-beat-frontend:latest

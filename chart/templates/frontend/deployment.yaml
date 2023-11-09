@@ -33,26 +33,40 @@ spec:
       serviceAccountName:
         {{- include "beat.serviceAccountName" . | nindent 8 }}
       securityContext:
-        {{- toYaml .Values.backend.podSecurityContext | nindent 8 }}
+        {{- toYaml .Values.frontend.podSecurityContext | nindent 8 }}
       containers:
         - name: {{ .Chart.Name }}
           securityContext:
-            {{- toYaml .Values.backend.securityContext | nindent 12 }}
+            {{- toYaml .Values.frontend.securityContext | nindent 12 }}
           image: "{{ .Values.image.frontend }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          {{- with .Values.backend.env }}
           env:
+            - name: "FRONTEND_URL"
+              value: {{ .Values.publicUrl | quote }}
+            - name: "BACKEND_URL"
+              value: "{{ .Values.publicUrl }}/api"
+          {{- if not .Values.msal.secretName }}
+            - name: "MSAL_CLIENT_ID"
+              value: {{ .Values.msal.clientId | quote }}
+            - name: "MSAL_AUTHORITY"
+              value: {{ .Values.msal.authority | quote }}
+          {{- end }}
+          {{- with .Values.frontend.env }}
             {{ toYaml . | nindent 12 }}
           {{- end }}
-          {{- if or .Values.backend.envConfigMaps .Values.backend.envSecrets }}
+          {{- if or .Values.frontend.envConfigMaps .Values.frontend.envSecrets }}
           envFrom:
-            {{- range $envConfigMap := .Values.backend.envConfigMaps }}
+            {{- range $envConfigMap := .Values.frontend.envConfigMaps }}
             - configMapRef:
                 {{- toYaml $envConfigMap | nindent 16 }}
             {{- end }}
-            {{- range $envSecret := .Values.backend.envSecrets }}
+            {{- range $envSecret := .Values.frontend.envSecrets }}
             - secretRef:
                 {{- toYaml $envSecret | nindent 16 }}
+            {{- end }}
+            {{- with .Values.msal.secretName }}
+            - secretRef:
+              name: {{ . | quote }}
             {{- end }}
           {{- end }}
           ports:
@@ -67,19 +81,19 @@ spec:
             httpGet:
               path: /
               port: http
-          {{- with .Values.backend.resources }}
+          {{- with .Values.frontend.resources }}
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
-      {{- with .Values.backend.nodeSelector }}
+      {{- with .Values.frontend.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.backend.affinity }}
+      {{- with .Values.frontend.affinity }}
       affinity:
         {{- toYaml . | nindent 8 }}
       {{- end }}
-      {{- with .Values.backend.tolerations }}
+      {{- with .Values.frontend.tolerations }}
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}

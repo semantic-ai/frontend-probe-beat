@@ -3,7 +3,7 @@ import { fetchUtils, DataProvider } from "ra-core";
 
 const countHeader: string = "Content-Range";
 
-export const getApiBaseUrl = () => import.meta.env.VITE_BACKEND_URL;
+export const getApiBaseUrl = () => window["env"]["backendUrl"];
 
 export const createClient = (url: any, options: any = {}) => {
   return fetchUtils.fetchJson(url, options);

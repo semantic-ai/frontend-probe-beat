@@ -17,7 +17,7 @@ const App = () => {
   const wrappedAcquireTokenSilent = () =>
     msalobj
       .acquireTokenSilent({
-        scopes: [`${import.meta.env.VITE_MSAL_CLIENT_ID}/.default`],
+        scopes: [`${window["env"]["msalClientId"]}/.default`],
         account: msalobj.getActiveAccount(),
       })
       .then((response) => response?.accessToken);

@@ -9,6 +9,10 @@ image:
   pullSecrets: []
     # - name: <secret-name>
 
+## Url where the application will be hosted
+## Must omit final backslash (/)
+publicUrl: "https://beat.example.com"
+
 ## SparQL database
 sparql:
   ## SparQL endpoints
@@ -40,7 +44,7 @@ msal:
   # secretName: ""
 
 backend:
-  ## number of backend server replicas to deploy
+  ## Number of backend server replicas to deploy
   replicaCount: 1
 
   ## Additional environment variables to set for the backend container. See
@@ -94,7 +98,7 @@ backend:
   affinity: {}
 
 frontend:
-  ## number of frontend server replicas to deploy
+  ## Number of frontend server replicas to deploy
   replicaCount: 1
 
   ## Additional environment variables to set for the frontend container. See
