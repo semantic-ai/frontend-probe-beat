@@ -9,10 +9,6 @@ image:
   pullSecrets: []
     # - name: <secret-name>
 
-## Url where the application will be hosted
-## Must omit final backslash (/)
-publicUrl: "https://beat.example.com"
-
 ## SparQL database
 sparql:
   ## SparQL endpoints
@@ -118,6 +114,18 @@ frontend:
   ## https://kubernetes.io/docs/tasks/inject-data-application/distribute-credentials-secure/#configure-all-key-value-pairs-in-a-secret-as-container-environment-variables
   envSecrets: []
     # - name: my-secret
+  
+  ## Additional volumes that should be included. See:
+  ## https://kubernetes.io/docs/concepts/storage/volumes/
+  volumes: []
+    # - name: my-volume
+    #   configMap: my-config-map
+
+  ## Additional volume mounts that should be included. See:
+  ## https://kubernetes.io/docs/concepts/storage/volumes/
+  volumeMounts: []
+    # - name: my-volume
+    #   mountPath: /opt/auth
 
   ## Additional labels that should be included on the pod. See:
   ## https://kubernetes.io/docs/concepts/overview/working-with-objects/labels

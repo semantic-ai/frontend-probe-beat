@@ -10,11 +10,6 @@ COPY . ./
 RUN yarn run build --mode $MODE
 
 FROM nginxinc/nginx-unprivileged:1.25-alpine
-COPY --from=build-deps --chown=101:101 /usr/src/app/dist /usr/share/nginx/html
-USER root
-RUN chown 101:101 /usr/share/nginx/html
-USER 101
+COPY --from=build-deps /usr/src/app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 EXPOSE 8080
-
-CMD ["/bin/sh",  "-c",  "envsubst < /usr/share/nginx/html/env.template.js > /usr/share/nginx/html/env.js && exec nginx -g 'daemon off;'"]

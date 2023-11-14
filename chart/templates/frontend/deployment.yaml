@@ -40,18 +40,8 @@ spec:
             {{- toYaml .Values.frontend.securityContext | nindent 12 }}
           image: "{{ .Values.image.frontend }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
-          env:
-            - name: "FRONTEND_URL"
-              value: {{ .Values.publicUrl | quote }}
-            - name: "BACKEND_URL"
-              value: "{{ .Values.publicUrl }}/api"
-          {{- if not .Values.msal.secretName }}
-            - name: "MSAL_CLIENT_ID"
-              value: {{ .Values.msal.clientId | quote }}
-            - name: "MSAL_AUTHORITY"
-              value: {{ .Values.msal.authority | quote }}
-          {{- end }}
           {{- with .Values.frontend.env }}
+          env:
             {{ toYaml . | nindent 12 }}
           {{- end }}
           {{- if or .Values.frontend.envConfigMaps .Values.frontend.envSecrets }}
@@ -73,6 +63,10 @@ spec:
             - name: http
               containerPort: 8080
               protocol: TCP
+          {{- with .Values.frontend.volumeMounts }}
+          volumeMounts:
+            {{ toYaml . | nindent 12 }}
+          {{- end }}
           livenessProbe:
             httpGet:
               path: /
@@ -85,6 +79,10 @@ spec:
           resources:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+      {{- with .Values.frontend.volumes }}
+      volumes:
+        {{ toYaml . | nindent 8 }}
+      {{- end }}
       {{- with .Values.frontend.nodeSelector }}
       nodeSelector:
         {{- toYaml . | nindent 8 }}
