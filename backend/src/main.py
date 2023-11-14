@@ -1,16 +1,17 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+from .config import Config
 from .routers import decision, annotation, taxonomy, health
 
-app = FastAPI()
+config = Config()
 
-origins = ["http://localhost:5173"]
+app = FastAPI()
 
 # Middlewares
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=[config.fastapi.origin],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

@@ -41,6 +41,8 @@ spec:
           image: "{{ .Values.image.backend }}:{{ .Values.image.tag }}"
           imagePullPolicy: {{ .Values.image.pullPolicy }}
           env:
+            - name: "FASTAPI_ORIGIN"
+              value: {{ .Values.publicUrl | quote }}
             - name: "SPARQL_DECISION_ENDPOINT"
               value: {{ .Values.sparql.endpoint.decision }}
             - name: "SPARQL_TAXONOMY_ENDPOINT"

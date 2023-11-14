@@ -9,6 +9,10 @@ image:
   pullSecrets: []
     # - name: <secret-name>
 
+## Url where the application will be hosted
+## Must omit final backslash (/)
+publicUrl: "https://beat.example.com"
+
 ## SparQL database
 sparql:
   ## SparQL endpoints
