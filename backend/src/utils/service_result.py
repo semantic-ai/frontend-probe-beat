@@ -1,7 +1,6 @@
 import logging
 import inspect
 from fastapi import Response
-from typing import Optional
 
 from .app_exceptions import AppExceptionCase
 
@@ -34,7 +33,7 @@ class ServiceResult(object):
             return "<ServiceResult Success>"
         return f"<ServiceResult AppException {self.exception_case}>"
 
-    def handle(self, response: Optional[Response] = None):
+    def handle(self, response: Response | None = None):
         logger = logging.getLogger("service")
         if response is not None:
             response.headers.update(self.headers)

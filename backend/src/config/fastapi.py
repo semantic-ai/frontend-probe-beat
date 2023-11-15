@@ -1,7 +1,7 @@
-from pydantic_settings import BaseSettings
+from .base import Settings
 
 
-class FastApiConfig(BaseSettings):
+class FastApiConfig(Settings):
     origin: str
 
     class Config:

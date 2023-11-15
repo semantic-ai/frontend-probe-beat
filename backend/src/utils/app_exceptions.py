@@ -23,13 +23,3 @@ async def app_exception_handler(request: Request, exc: AppExceptionCase):
             "context": exc.context,
         },
     )
-
-
-class AppException(object):
-    class HostedModelCreateItem(AppExceptionCase):
-        def __init__(self, context: dict = None):
-            """
-            Item creation failed
-            """
-            status_code = 500
-            AppExceptionCase.__init__(self, status_code, context)

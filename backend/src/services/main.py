@@ -46,9 +46,10 @@ class SparkRequestHandler:
             data={"query": query},
             headers=self.HEADERS,
             auth=self.auth,
+            timeout=5
         )
 
         if not response.ok:
-            print(response.text)
+            raise Exception(f"Sparql response not ok: {response.status_code} {response.text}")
 
         return response.json()
