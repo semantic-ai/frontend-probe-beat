@@ -1,5 +1,0 @@
-apiVersion: v2
-name: beat
-description: Besluit Annotation Tool
-type: application
-version: 0.1.1
