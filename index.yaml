@@ -1,0 +1,13 @@
+apiVersion: v1
+entries:
+  beat:
+  - apiVersion: v2
+    created: "2023-11-23T07:13:16.169017326Z"
+    description: Besluit Annotation Tool
+    digest: c13f2919c4cd760d5020800695902ec6958f1791f55d99f1593c1e594788dcbc
+    name: beat
+    type: application
+    urls:
+    - https://github.com/semantic-ai/frontend-probe-beat/releases/download/beat-0.1.2/beat-0.1.2.tgz
+    version: 0.1.2
+generated: "2023-11-23T07:13:16.169029278Z"
