@@ -87,7 +87,7 @@ class AnnotationCRUD(SparkRequestHandler):
                 {{
                     ?anno ext:hasLabel ?label_uri .
                     ?label_uri ext:hasScore ?score ; ext:isTaxonomy ?taxonomy_node .
-                    FILTER (?score > 0.65)
+                    FILTER (?score > 0.5)
                 }} GROUP BY ?anno
             }}
         }}
