@@ -1,13 +1,12 @@
 import json
 import logging
-from fastapi import APIRouter, Security, Query, Response, HTTPException
 
-from ..schemas.annotation import (
-    AnnotationResponse,
-    AnnotationCreate,
-)
-from ..services.annotation import AnnotationService
+from fastapi import APIRouter, Depends, Query, Response, HTTPException
+
 from ..config.iam import validate_user
+from ..schemas.annotation import AnnotationResponse, AnnotationCreate
+from ..services.annotation import AnnotationService
+
 
 router = APIRouter(prefix="/api")
 
@@ -18,7 +17,7 @@ def get_annotations(
     range: str = Query(default="[0, 100]"),
     filter: str = Query(default="{}"),
     sort: str = Query(default='["id", "DESC"]'),
-    user: None = Security(dependency=validate_user, scopes=[]),
+    user: None = Depends(validate_user),
 ) -> AnnotationResponse:
     start, stop = json.loads(range)
     filter = json.loads(filter)
@@ -34,7 +33,7 @@ def get_annotations(
 @router.post("/annotations")
 def create_annotation(
     item: AnnotationCreate,
-    user: None = Security(dependency=validate_user, scopes=[]),
+    user: None = Depends(validate_user),
 ):
     try:
         result = AnnotationService().create(item)

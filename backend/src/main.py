@@ -4,6 +4,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from .config import Config
 from .routers import decision, annotation, taxonomy, health
 
+
 config = Config()
 
 app = FastAPI()

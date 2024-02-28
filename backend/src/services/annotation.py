@@ -1,7 +1,8 @@
-import logging
-import requests
-import uuid
 from datetime import datetime
+import uuid
+import logging
+
+import httpx
 
 from .main import SparkRequestHandler, AppService
 from .taxonomy import TaxonomyCRUD
@@ -190,7 +191,7 @@ class AnnotationCRUD(SparkRequestHandler):
         )
 
         result = self.query(query)
-        if isinstance(result, requests.Response):
+        if isinstance(result, httpx.Response):
             logging.error(
                 "Error when inserting:\nResponse status:{}\nContent: {}:".format(
                     str(result.status_code), str(result.content)

@@ -1,11 +1,12 @@
 import json
 import logging
-from fastapi import APIRouter, Security, Query, Response, HTTPException
 
+from fastapi import APIRouter, Depends, Query, Response, HTTPException
+
+from ..config.iam import validate_user
 from ..schemas.decision import DecisionResponse, DecisionDetailed
 from ..services.decision import DecisionService
 
-from ..config.iam import validate_user
 
 router = APIRouter(prefix="/api")
 
@@ -15,7 +16,7 @@ def get_decisions(
     response: Response,
     range: str = Query(default="[0, 999]"),
     filter: str = Query(default="{}"),
-    user: None = Security(dependency=validate_user, scopes=[]),
+    user: None = Depends(validate_user),
 ) -> DecisionResponse:
     start, stop = json.loads(range)
     filters = json.loads(filter)
@@ -30,7 +31,7 @@ def get_decisions(
 @router.get("/decisions/{id}", response_model=DecisionDetailed)
 def get_decision(
     id: str,
-    user: None = Security(dependency=validate_user, scopes=[]),
+    user: None = Depends(validate_user),
 ) -> DecisionDetailed:
     try:
         result = DecisionService().get_one(id)

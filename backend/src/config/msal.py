@@ -2,8 +2,9 @@ from .base import Settings
 
 
 class MSALConfig(Settings):
-    client_id: str
-    issuer: str
+    enabled: bool = True
+    client_id: str = ""
+    issuer: str = ""
 
     class Config:
-        env_prefix = "MSAL_"
+        env_prefix = "msal_"

@@ -1,32 +1,36 @@
-from typing import Optional
+from typing import Annotated
 
-from fastapi import HTTPException, Depends, Request
-from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials, SecurityScopes
+from azure_ad_verify_token import verify_jwt
+from fastapi import HTTPException, Depends
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 
-from .azure_ad import verify_azure_jwt
+from .msal import MSALConfig
 
 
-class OAuthHTTPBearer(HTTPBearer):
-    async def __call__(self, request: Request):
-        token = await super().__call__(request)
+config = MSALConfig()
 
-        if token is None:
-            token = request.query_params.get("token", None)
-            if token is not None:
-                return HTTPAuthorizationCredentials(scheme="Bearer", credentials=token)
-
-        return token
+bearer_scheme = HTTPBearer(auto_error=False)
 
 
 async def validate_user(
-    security_scopes: SecurityScopes,
-    creds: Optional[HTTPAuthorizationCredentials] = Depends(
-        OAuthHTTPBearer(auto_error=False)
-    ),
+    credentials: Annotated[HTTPAuthorizationCredentials, Depends(bearer_scheme)],
 ) -> None:
-    if creds is None:
+    if not config.enabled:
+        return
+
+    if credentials is None:
         raise HTTPException(403, detail="Missing bearer token")
 
-    token = creds.credentials
-    verify_azure_jwt(token)
-    return
+    token = credentials.credentials
+
+    azure_ad_app_id = config.client_id
+    azure_ad_issuer = config.issuer
+    azure_ad_jwks_uri = "https://login.microsoftonline.com/common/discovery/keys"
+
+    verify_jwt(
+        token=token,
+        valid_audiences=[azure_ad_app_id],
+        issuer=azure_ad_issuer,
+        jwks_uri=azure_ad_jwks_uri,
+        verify=False,
+    )

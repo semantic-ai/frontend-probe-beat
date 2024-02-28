@@ -1,10 +1,11 @@
 import json
 import logging
-from fastapi import APIRouter, Security, Query, Response, HTTPException
 
+from fastapi import APIRouter, Depends, Query, Response, HTTPException
+
+from ..config.iam import validate_user
 from ..schemas.taxonomy import TaxonomyResponse, TaxonomyDetailed
 from ..services.taxonomy import TaxonomyService
-from ..config.iam import validate_user
 
 
 router = APIRouter(prefix="/api")
@@ -14,7 +15,7 @@ router = APIRouter(prefix="/api")
 def get_taxonomies(
     response: Response,
     filter: str = Query(default="{}"),
-    user: None = Security(dependency=validate_user, scopes=[]),
+    user: None = Depends(validate_user),
 ) -> TaxonomyResponse:
     filters = json.loads(filter)
     try:
@@ -28,7 +29,7 @@ def get_taxonomies(
 @router.get("/taxonomies/{id}")
 def get_taxonomy(
     id: str,
-    user: None = Security(dependency=validate_user, scopes=[]),
+    user: None = Depends(validate_user),
 ) -> TaxonomyDetailed:
     try:
         result = TaxonomyService().get_one(id)

@@ -1,5 +1,4 @@
-import requests
-from requests.auth import HTTPBasicAuth, HTTPDigestAuth
+import httpx
 
 from ..config import config
 from ..enums import SparqlType, SparqlAuthType
@@ -26,11 +25,11 @@ class SparkRequestHandler:
             case SparqlAuthType.NONE:
                 self.auth = None
             case SparqlAuthType.BASIC:
-                self.auth = HTTPBasicAuth(
+                self.auth = httpx.BasicAuth(
                     self.config.sparql.auth_username, self.config.sparql.auth_password
                 )
             case SparqlAuthType.DIGEST:
-                self.auth = HTTPDigestAuth(
+                self.auth = httpx.DigestAuth(
                     self.config.sparql.auth_username, self.config.sparql.auth_password
                 )
 
@@ -41,15 +40,14 @@ class SparkRequestHandler:
                 self.endpoint = self.config.sparql.taxonomy_endpoint
 
     def query(self, query: str):
-        response = requests.post(
+        response = httpx.post(
             url=self.endpoint,
             data={"query": query},
             headers=self.HEADERS,
-            auth=self.auth,
-            timeout=5
+            auth=self.auth
         )
 
-        if not response.ok:
+        if not response.is_success:
             raise Exception(f"Sparql response not ok: {response.status_code} {response.text}")
 
         return response.json()
