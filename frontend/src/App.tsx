@@ -14,6 +14,8 @@ import { authProvider, msalobj } from "./authorization/authProvider";
 const BeATLayout = (props) => <Layout {...props} appBar={BeATAppbar} />;
 
 const App = () => {
+  const msalEnabled = "msalEnabled" in window["env"] ? Boolean(Number(window["env"]["msalEnabled"])) : true
+
   const wrappedAcquireTokenSilent = () =>
     msalobj
       .acquireTokenSilent({
@@ -22,7 +24,7 @@ const App = () => {
       })
       .then((response) => response?.accessToken);
 
-  const dataProvider = customDataProvider(wrappedAcquireTokenSilent);
+  const dataProvider = customDataProvider(msalEnabled ? wrappedAcquireTokenSilent : () => {return Promise.resolve("")});
 
   return (
     <BrowserRouter>
@@ -30,7 +32,7 @@ const App = () => {
         dataProvider={dataProvider}
         theme={theme}
         layout={BeATLayout}
-        authProvider={authProvider}
+        authProvider={msalEnabled ? authProvider : undefined}
         loginPage={LoginPage}
       >
         <Resource
