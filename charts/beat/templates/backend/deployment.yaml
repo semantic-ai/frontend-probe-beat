@@ -56,6 +56,8 @@ spec:
               value: {{ .Values.sparql.auth.password | quote }}
           {{- end }}
           {{- if not .Values.msal.secretName }}
+            - name: "MSAL_ENABLED"
+              value: {{ .Values.msal.enabled }}
             - name: "MSAL_CLIENT_ID"
               value: {{ .Values.msal.clientId | quote }}
             - name: "MSAL_ISSUER"

@@ -34,6 +34,8 @@ sparql:
 ## Microsoft Authentication
 ## To use secrets instead set the following corresponding env variables
 msal:
+  ## MSAL_ENABLED
+  enabled: 1
   ## MSAL_CLIENT_ID
   clientId: ""
   ## MSAL_AUTHORITY
