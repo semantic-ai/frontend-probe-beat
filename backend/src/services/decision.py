@@ -47,7 +47,7 @@ class DecisionCRUD(SparkRequestHandler):
         SELECT (COUNT(*) AS ?count) WHERE {{
         ?_besluit a besluit:Besluit.
         OPTIONAL {{?_besluit eli:title_short ?short_title. }}
-        FILTER (!STRSTARTS(STR(?_besluit), "http://srv"))
+        FILTER (STRSTARTS(STR(?_besluit), "https://data"))
         {0}
         }}
         """.format(
@@ -70,7 +70,8 @@ class DecisionCRUD(SparkRequestHandler):
             ?_besluit a besluit:Besluit.
             OPTIONAL {{?_besluit eli:title_short ?short_title. }}
             OPTIONAL {{?_besluit ext:hasAnnotation / ext:withUser ?user . }}
-            FILTER (!STRSTARTS(STR(?_besluit), "http://srv"))
+            FILTER (!STRSTARTS(STR(?_besluit), "https://ebesluitvorming"))
+            FILTER (!STRSTARTS(STR(?_besluit), "http://ebesluitvorming"))
             {0}
         }}
         GROUP BY ?_besluit
