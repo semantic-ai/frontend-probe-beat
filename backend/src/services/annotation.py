@@ -52,7 +52,10 @@ class AnnotationCRUD(SparkRequestHandler):
         PREFIX dct: <http://purl.org/dc/terms/>
         PREFIX ext:  <http://mu.semte.ch/vocabularies/ext/>
 
-        SELECT * WHERE
+        SELECT * 
+        FROM <http://mu.semte.ch/application/probe/user-annotations>
+        FROM <http://mu.semte.ch/application/probe/model-annotations>
+        WHERE
         {{
             VALUES ?besluit {{<{}> }}
             ?besluit ext:hasAnnotation ?anno .
