@@ -1,15 +1,18 @@
-FROM node:20.9-alpine as build-deps
+FROM node:22-alpine AS builder
 
 ARG MODE=production
 
 WORKDIR /usr/src/app
-COPY package.json /usr/src/app/package.json
-COPY yarn.lock /usr/src/app/yarn.lock
+
+COPY package.json yarn.lock ./
 RUN yarn install
-COPY . ./
+
+COPY . .
 RUN yarn run build --mode $MODE
 
-FROM nginxinc/nginx-unprivileged:1.25-alpine
-COPY --from=build-deps /usr/src/app/dist /usr/share/nginx/html
+FROM nginxinc/nginx-unprivileged:1.27-alpine
+
+COPY --from=builder /usr/src/app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+
 EXPOSE 8080

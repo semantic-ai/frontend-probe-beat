@@ -1,6 +1,6 @@
-fastapi~=0.110.0
+fastapi~=0.115.8
+uvicorn[standard]~=0.34.0
 azure-ad-verify-token~=0.4.0
-pydantic~=2.6.3
-pydantic-settings~=2.2.1
-httpx~=0.27.0
-uvicorn~=0.27.1
+pydantic~=2.10.6
+pydantic-settings~=2.7.1
+httpx~=0.28.1
