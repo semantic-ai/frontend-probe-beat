@@ -70,8 +70,8 @@ class DecisionCRUD(SparkRequestHandler):
             ?_besluit a besluit:Besluit.
             OPTIONAL {{?_besluit eli:title_short ?short_title. }}
             OPTIONAL {{?_besluit ext:hasAnnotation / ext:withUser ?user . }}
-            FILTER (!STRSTARTS(STR(?_besluit), "https://ebesluitvorming"))
-            FILTER (!STRSTARTS(STR(?_besluit), "http://ebesluitvorming"))
+            FILTER (!STRSTARTS(STR(?_besluit), "https://raadpleegomgeving"))
+            FILTER (!STRSTARTS(STR(?_besluit), "http://raadpleegomgeving"))
             {0}
         }}
         GROUP BY ?_besluit
