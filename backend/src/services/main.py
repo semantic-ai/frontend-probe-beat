@@ -44,7 +44,8 @@ class SparkRequestHandler:
             url=self.endpoint,
             data={"query": query},
             headers=self.HEADERS,
-            auth=self.auth
+            auth=self.auth,
+            timeout=30.0,
         )
 
         if not response.is_success:
