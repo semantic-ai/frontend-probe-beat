@@ -114,6 +114,7 @@ class DecisionCRUD(SparkRequestHandler):
         OPTIONAL {{
             ?_besluit prov:wasDerivedFrom ?fallback_link .
         }}
+        }}
         """.format(
             id
         )
