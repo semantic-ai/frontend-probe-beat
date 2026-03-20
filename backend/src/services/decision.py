@@ -107,7 +107,12 @@ class DecisionCRUD(SparkRequestHandler):
         OPTIONAL {{?_besluit eli:title_short ?short_title.}}
         OPTIONAL {{?_besluit besluit:motivering ?motivering.}}
         OPTIONAL {{?_besluit eli:date_publication ?publicatiedatum.}}
-        OPTIONAL {{?_besluit prov:wasDerivedFrom ?portal_link .}}
+        OPTIONAL {{
+            ?_besluit prov:wasDerivedFrom ?portal_link .
+            ?portal_link prov:generated ?_besluit .
+        }}
+        OPTIONAL {{
+            ?_besluit prov:wasDerivedFrom ?fallback_link .
         }}
         """.format(
             id
@@ -146,6 +151,6 @@ class DecisionCRUD(SparkRequestHandler):
             short_title=decision.get("short_title", {}).get("value", None),
             description=decision.get("beschrijving", {}).get("value", None),
             motivation=decision.get("motivering", {}).get("value", None),
-            portal_link=decision.get("portal_link", {}).get("value", None),
+            portal_link=(decision.get("portal_link") or decision.get("fallback_link") or {}).get("value", None),
             articles=article_list,
         )
